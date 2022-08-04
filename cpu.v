@@ -2,7 +2,7 @@ module cpu(
     input clk,
     input reset
     );
-    
+
     //decoder - register
     wire [31:0] INST;
     wire [4:0]  RS1_ADDR;
@@ -23,7 +23,7 @@ module cpu(
     // decoder - selecter - alu
     wire [31:0] DATA2;
 
-    decode decoder(
+    decoder decoder(
         // register
         .instr(INST),
         .rs1_addr(RS1_ADDR),
