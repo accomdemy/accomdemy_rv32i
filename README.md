@@ -9,3 +9,4 @@
     - 修正排版
     - 補全 R-Type & I-Type Instruction
     - 補全 IMM 功能
+    - 修正 Register 的條件判斷

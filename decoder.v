@@ -11,7 +11,7 @@ module decoder(
     output reg              r2_enable,
     output reg              w_enable,
     output reg              imm_enable
-    );
+);
 
     // ALU OP
     // ----------------
@@ -27,8 +27,9 @@ module decoder(
     // 0x09: or
     // 0x0a: and
 
-    localparam              _enable     = 1'b1;
-    localparam              _disable    = 1'b0;
+    localparam  _enable     = 1'b1;
+    localparam  _disable    = 1'b0;
+   
     
     always@(*) begin
 

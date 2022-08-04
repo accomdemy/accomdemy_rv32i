@@ -3,7 +3,7 @@ module alu(
     input      [31:0] b,
     input      [7:0]  op,
     output reg [31:0] y
-    );
+);
 
     always@(*) begin
         case(op)                  

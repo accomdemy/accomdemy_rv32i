@@ -9,10 +9,10 @@ module regfile(
     input       [4:0]   rs2_addr,
     input       [4:0]   wb_addr,
 
-    input       [31:0]  wb_data,
+    input      [31:0]   wb_data,
     output reg [31:0]   rs1,
     output reg [31:0]   rs2
-    );
+);
 
     reg        [31:0]   regfile [31:0];
 
@@ -25,25 +25,29 @@ module regfile(
     end
 
     always@(*) begin
-        if(r1_enable && rs1_addr == 0)
+        if(!r1_enable)
             rs1 = 0;
-        else if(w_enable && r1_enable && rs1_addr != 0)
-            rs1 = wb_data;
-        else if(r1_enable && rs1_addr != 0)
-            rs1 = regfile[rs1_addr];
+        else if (r1_enable && rs1_addr != 0) begin
+            if(w_enable && rs1_addr == wb_addr)
+                rs1 = wb_data;
+            else
+                rs1 = regfile[rs1_addr];
+        end
         else
             rs1 = 0;
     end
 
     always@(*) begin
-        if(r2_enable && rs2_addr == 0)
+        if(!r2_enable)
             rs2 = 0;
-        else if(w_enable && r2_enable && rs2_addr != 0)
-            rs2 = wb_data;
-        else if(r2_enable && rs2_addr != 0)
-            rs2 = regfile[rs2_addr];
+        else if (r2_enable && rs1_addr != 0) begin
+            if(w_enable && rs2_addr == wb_addr)
+                rs2 = wb_data;
+            else
+                rs2 = regfile[rs2_addr];
+        end
         else
-            rs2 = 0;
+            rs1 = 0;
     end
 
 endmodule

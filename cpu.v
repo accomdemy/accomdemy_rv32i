@@ -1,10 +1,11 @@
 module cpu(
     input clk,
-    input reset
-    );
+    input reset,
+    input wire [31:0] INST
+);
 
-    //decoder - register
-    wire [31:0] INST;
+    // decoder - register
+    // wire [31:0] INST;
     wire [4:0]  RS1_ADDR;
     wire [4:0]  RS2_ADDR;
     wire [4:0]  WADDR;
@@ -59,6 +60,7 @@ module cpu(
         .rs2(RS2)
     );
 
+    // imm
     always @(*) begin
         if (IMM_ENABLE)
             DATA2 = IMM_NUMBER;
