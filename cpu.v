@@ -21,7 +21,7 @@ module cpu(
     wire [31:0] WB_DATA;
 
     // decoder - selecter - alu
-    wire [31:0] DATA2;
+    reg [31:0] DATA2;
 
     decoder decoder(
         // register
