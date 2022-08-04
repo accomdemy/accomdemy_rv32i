@@ -1,7 +1,12 @@
-<center>
-    <h1> Accomdemy RV32I CPU</h1>
-    <img src="https://img.shields.io/github/commit-activity/m/accomdemy/accomdemy_rv32i" /> <img src="https://img.shields.io/github/repo-size/accomdemy/accomdemy_rv32i?color=yellow&style=flat-square" /> <img src="https://img.shields.io/github/forks/accomdemy/accomdemy_rv32i?style=social"/> <img src="https://img.shields.io/discord/838422912507052062?color=green" />
-</center>
+<h1 align="center">
+    Accomdemy RV32I CPU
+</h1>
+<p align="center">
+    <img src="https://img.shields.io/github/commit-activity/m/accomdemy/accomdemy_rv32i" />
+    <img src="https://img.shields.io/github/repo-size/accomdemy/accomdemy_rv32i?color=yellow&style=flat-square" />
+    <img src="https://img.shields.io/github/forks/accomdemy/accomdemy_rv32i?style=social"/>
+    <img src="https://img.shields.io/discord/838422912507052062?color=green" />
+</p>
 
 # 目錄
 - [關於伴伴學](#關於伴伴學)
@@ -12,7 +17,7 @@
     - [20220802](#20220802)
     - [20220804](#20220804)
 
-# 關於伴伴學
+# [關於伴伴學](https://hackmd.io/@accomdemy/SJsr63mkt)
 伴伴學 Accomdemy 是由一群來自科技圈、新創圈、教育圈的夥伴們自發性組成的自學組織。
 <center>
     <h3 style="font-weight: bold;">Accomdemy = Accompany + Academy！</h3>
@@ -25,13 +30,8 @@
 
 我們相信教育和科技可以使人突破自我限制，讓這個世界變得更美好；而我們相信最好的學習方法來自於有動力的自主學習，所以我們號召有同樣信仰的夥伴們一起付出自己所長，讓想要學習卻不得其門而入的人能夠享受學習的趣味，即時獲得有經驗的導師 (Mentor) 指導解惑，讓學習的路上有趣又不孤單。
 
-# 關於此專案
+# [關於此專案](https://hackmd.io/@accomdemy/BJprQ8Xjc/)
 > 提示：當前我們想要完成的目標可以在issue裡面看到。
-<center>
-    <a href="https://hackmd.io/@accomdemy/BJprQ8Xjc/">
-        <img src="./img/banner.png" />
-    </a>
-</center>
 
 2022的暑假，我們在線上舉辦RiscV伴學松，透過每周的活動時間，在「大家都不懂」的情況下，一起學習什麼是RiscV CPU，以及挑戰看看如何做出屬於自己的一顆CPU！
 
