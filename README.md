@@ -1,6 +1,5 @@
-<h1 align="center">
-    Accomdemy RV32I CPU
-</h1>
+<img align="right" src="./img/logo.png" width="192" />
+<h1 align="left">Accomdemy RV32I CPU</h1>
 <p align="center">
     <img src="https://img.shields.io/github/commit-activity/m/accomdemy/accomdemy_rv32i" />
     <img src="https://img.shields.io/github/repo-size/accomdemy/accomdemy_rv32i?color=yellow&style=flat-square" />
