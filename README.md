@@ -3,7 +3,6 @@
 <p align="center">
     <img src="https://img.shields.io/github/commit-activity/m/accomdemy/accomdemy_rv32i" />
     <img src="https://img.shields.io/github/repo-size/accomdemy/accomdemy_rv32i?color=yellow&style=flat-square" />
-    <img src="https://img.shields.io/github/forks/accomdemy/accomdemy_rv32i?style=social"/>
     <img src="https://img.shields.io/discord/838422912507052062?color=green" />
 </p>
 
