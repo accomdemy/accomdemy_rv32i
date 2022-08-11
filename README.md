@@ -1,10 +1,3 @@
-<<<<<<< HEAD
-# accomdemy_rv32i
-伴伴學 RV32I
-# alu 
-#decode 
-#regfile
-=======
 <img align="right" src="./img/logo.png" width="192" />
 <h1 align="left">Accomdemy RV32I CPU</h1>
 <p align="center">
@@ -63,4 +56,3 @@
     - 補全 R-Type & I-Type Instruction
     - 補全 IMM 功能
     - 修正 Register 的條件判斷
->>>>>>> 08322bd43484780dc93a278a5fc8fda1373f616d
