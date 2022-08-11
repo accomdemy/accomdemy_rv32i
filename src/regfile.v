@@ -1,81 +1,53 @@
-`timescale 1ns / 1ps
-//////////////////////////////////////////////////////////////////////////////////
-// Company: 
-// Engineer: 
-// 
-// Create Date: 07/28/2022 08:21:13 PM
-// Design Name: 
-// Module Name: regfile
-// Project Name: 
-// Target Devices: 
-// Tool Versions: 
-// Description: 
-// 
-// Dependencies: 
-// 
-// Revision:
-// Revision 0.01 - File Created
-// Additional Comments:
-// 
-//////////////////////////////////////////////////////////////////////////////////
-
-
 module regfile(
-    input clk,
-    input rest,
-    input we,
-    input [4:0] rs1_a,
-    input [4:0] rs2_a,
-    input [4:0] rd_a,
-    input [31:0] rd_dt,
-    output [31:0] rs1_dt,
-    output [31:0] rs2_dt
-    );
+    input               clk,
+    input               w_enable,
+    input               r1_enable,
+    input               r2_enable,
+    input               rst,
 
-    reg [31:0] memorydt[0:1024];
+    input       [4:0]   rs1_addr,
+    input       [4:0]   rs2_addr,
+    input       [4:0]   wb_addr,
 
-    reg [31:0] rs1_buf;
-    reg [31:0] rs2_buf;
+    input      [31:0]   wb_data,
+    output reg [31:0]   rs1,
+    output reg [31:0]   rs2
+);
 
-   
+    reg        [31:0]   regfile [31:0];
 
-    always @(*)
-    begin
-        if (we ==1'b1 && (rd_a != 5'b0000))
-            begin
-                memorydt[rd_a] =rd_dt;
+    always@(posedge(clk)) begin
+        if (!rst) begin
+            if (w_enable && wb_addr != 0) begin
+                regfile[wb_addr] <= wb_data;
             end
-        else
-            begin
-                memorydt[rd_a] =memorydt[rd_a];
-            end
+        end
     end
 
-    always @(*)
-    begin
-        if(rs1_a !=5'b00000)
-            begin
-                rs1_buf =memorydt[rs1_a];
-            end
+    always@(*) begin
+        if(!r1_enable)
+            rs1 = 0;
+        else if (r1_enable && rs1_addr != 0) begin
+            if(w_enable && rs1_addr == wb_addr)
+                rs1 = wb_data;
+            else
+                rs1 = regfile[rs1_addr];
+        end
         else
-            begin
-                rs1_buf= 32'h00000000;
-            end
-
+            rs1 = 0;
     end
 
-    always @(*)
-    begin
-        if(rs2_a !=5'b00000)
-            begin
-                rs2_buf =memorydt[rs2_a];
-            end
+    always@(*) begin
+        if(!r2_enable)
+            rs2 = 0;
+        else if (r2_enable && rs1_addr != 0) begin
+            if(w_enable && rs2_addr == wb_addr)
+                rs2 = wb_data;
+            else
+                rs2 = regfile[rs2_addr];
+        end
         else
-            begin
-                rs2_buf= 32'h00000000;
-            end
+            rs1 = 0;
     end
-    assign rs1_dt = rs1_buf;
-    assign rs2_dt = rs2_buf;
 
 endmodule
