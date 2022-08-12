@@ -124,7 +124,10 @@ module decoder(
              * ========================================================
              */
             default: 
+            begin
                 aluop = 8'h0;
+                w_enable    = _disable;
+            end
         endcase
     end
 

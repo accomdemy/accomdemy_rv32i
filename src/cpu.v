@@ -1,11 +1,10 @@
 module cpu(
     input clk,
-    input reset,
-    input wire [31:0] INST
+    input reset
 );
 
     // decoder - register
-    // wire [31:0] INST;
+    wire [31:0] INST;
     wire [4:0]  RS1_ADDR;
     wire [4:0]  RS2_ADDR;
     wire [4:0]  WADDR;
@@ -23,7 +22,14 @@ module cpu(
 
     // decoder - selecter - alu
     reg [31:0] DATA2;
-
+    
+    wire pc_en;
+    wire [31:0] pc_dt;
+    wire [31:0] pc_old;
+    
+    pc              _pc(clk,res,pc_en,pc_dt,pc_old);
+    instr_memory    _instr_memory(pc_dt,pc_en,INST);
+    
     decoder decoder(
         // register
         .instr(INST),
