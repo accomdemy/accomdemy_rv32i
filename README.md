@@ -49,12 +49,14 @@
 
 # 更新日誌
 ## 20220802 
-- upload by Mingming: alu.v / cpu.v / decoder.v / regfile.v
+- upload by [Mingming](https://github.com/MingMingFish): alu.v / cpu.v / decoder.v / regfile.v
 ## 20220804
-- upload by Blackcat: alu.v / cpu.v / decoder.v / regfile.v
+- upload by [Blackcat](https://github.com/minexo79): alu.v / cpu.v / decoder.v / regfile.v
     - 修正排版
     - 補全 R-Type & I-Type Instruction
     - 補全 IMM 功能
     - 修正 Register 的條件判斷
 ## 20220811
-- upload by 
+- upload by [謝祥辰](https://github.com/min4604): pc.v / inst_rom.v / MUX2to1_32bit.v
+    - 新增 pc.v / inst_rom.v / MUX2to1_32bit.v
+    - 修改 cpu.v / cpu_tb.v
