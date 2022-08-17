@@ -3,6 +3,11 @@ module cpu(
     input reset
 );
 
+    // program counter - inst fetch - decoder
+    wire pc_en;
+    wire [31:0] pc_dt;
+    wire [31:0] pc_old;
+    
     // decoder - register
     wire [31:0] INST;
     wire [4:0]  RS1_ADDR;
@@ -21,14 +26,21 @@ module cpu(
     wire [31:0] WB_DATA;
 
     // decoder - selecter - alu
-    reg [31:0] DATA2;
-    
-    wire pc_en;
-    wire [31:0] pc_dt;
-    wire [31:0] pc_old;
-    
-    pc              _pc(clk,res,pc_en,pc_dt,pc_old);
-    instr_memory    _instr_memory(pc_dt,pc_en,INST);
+    wire [31:0] DATA2;
+
+    pc pc(
+        .clk(clk),
+        .res(res),
+        .En(pc_en),
+        .pc(pc_dt),
+        .pc_old(pc_old)
+    );
+
+    instr_memory instr_memory(
+        .Addr(pc_dt),
+        .pc_en(pc_en),
+        .INST(INST)
+    );
     
     decoder decoder(
         // register
@@ -67,12 +79,12 @@ module cpu(
     );
 
     // imm
-    always @(*) begin
-        if (IMM_ENABLE)
-            DATA2 = IMM_NUMBER;
-        else
-            DATA2 = RS2;
-    end
+    MUX2to1_32bit mux_imm(
+        .I0(RS2),
+        .I1(IMM_NUMBER),
+        .s(IMM_ENABLE),
+        .f(DATA2)
+    );
 
     alu alu0(
         .a(RS1),

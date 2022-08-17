@@ -18,11 +18,9 @@ module cpu_tb;
         forever #1 clk = ~clk; 
        
     end
-     initial begin
-         #50 $stop;
+    initial begin
+        #50 $stop;
         #1 $finish;
-      end
-
-  
-
+    end
+      
 endmodule
