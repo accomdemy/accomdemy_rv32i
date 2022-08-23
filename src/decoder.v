@@ -10,7 +10,8 @@ module decoder(
     output reg              r1_enable,
     output reg              r2_enable,
     output reg              w_enable,
-    output reg              imm_enable
+    output reg              imm_enable,
+    output reg              jump_enable
 );
 
     // ALU OP
@@ -34,7 +35,7 @@ module decoder(
     always@(*) begin
 
         case(instr[6:0])                    // Type
-            7'b0110011: begin               // R Type
+            7'b0110011: begin               // R-Type
 
                 rs1_addr    = instr[19:15]; // rs1
                 rs2_addr    = instr[24:20]; // rs2
@@ -43,6 +44,7 @@ module decoder(
                 r2_enable   = _enable;
                 w_enable    = _enable;
                 imm_enable  = _disable;     // not r2_enable
+                jump_enable = _disable;
 
                 case(instr[14:12])          // Func3
                     3'b000:                 // add / sub
@@ -82,7 +84,7 @@ module decoder(
             /*
              * ========================================================
              */
-            7'b0010011: begin               // I Type
+            7'b0010011: begin               // I-Type
 
                 rs1_addr    = instr[19:15]; // rs1
                 imm_number  = {{20{instr[31]}}, instr[31:20]};  // imm
@@ -91,6 +93,7 @@ module decoder(
                 r2_enable   = _disable;
                 w_enable    = _enable;
                 imm_enable  = _enable;      // r2_enable
+                jump_enable = _disable;
 
                 case(instr[14:12])          // Func3
                     3'b000:                 // addi
@@ -123,6 +126,16 @@ module decoder(
             /*
              * ========================================================
              */
+            7'b1101111:   begin              // J-Type
+                imm_number  = { {11{instr[31]}}, instr[31], instr[19:12], instr[20], instr[30:21], 1'b0 };
+                w_addr      = instr[11:7];  // rd
+                r1_enable   = _disable;
+                r2_enable   = _disable;
+                w_enable    = _enable;
+                imm_enable  = _enable;
+                jump_enable = _enable;
+                aluop       = 8'h1;
+            end
             default: 
             begin
                 aluop = 8'h0;

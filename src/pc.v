@@ -1,30 +1,24 @@
 module pc(
     input clk,
-    input res,
-    input En,
-    output [31:0] pc,
-    output [31:0] pc_old
+    input reset,
+    input [31:0] jump_addr,
+    input jump_enable,
+    output reg [31:0] pc_next,
+    output reg [31:0] pc
 );
-
-    reg [31:0] pc_reg = 32'h0;
-    reg [31:0] pc_old_reg;
-
-    always @(posedge clk or negedge res) begin
-        if(res == 1'b1) begin
-            pc_reg = 0;
-            pc_old_reg = 0;
+    always @(posedge clk or negedge reset) begin
+        if(!reset) begin
+            pc      <= 0;
+            pc_next <= 0;
         end
-        else if(En == 1'b1) begin
-            pc_reg <= pc_reg + 3'b100;
-            pc_old_reg <= pc_reg;
+        else if (jump_enable) begin
+            pc      <= jump_addr;
+            pc_next <= jump_addr + 3'h4;
         end
         else begin
-            pc_reg = pc_reg;
+            pc      <= pc_next;
+            pc_next <= pc_next + 3'h4;
         end
     end
-
-    assign pc= pc_reg;
-    assign pc_old = pc_old_reg;
-
 
 endmodule
