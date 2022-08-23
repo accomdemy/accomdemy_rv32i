@@ -38,7 +38,7 @@
 而這個專案則會是跟著伴學松一起進行，在這段暑假內會根據每個階段增加/修改專案內的Module，最終變成一顆可以在Vivado合成運行的CPU。
 
 # 架構圖
-> 更新日期：2022/8/17
+> 更新日期：2022/8/23
 <center>
     <img src="./img/cpu.png" />
 </center>
@@ -60,3 +60,9 @@
 - upload by [謝祥辰](https://github.com/min4604): pc.v / inst_rom.v / MUX2to1_32bit.v
     - 新增 pc.v / inst_rom.v / MUX2to1_32bit.v
     - 修改 cpu.v / cpu_tb.v
+## 20220823
+- upload by [Mingming](https://github.com/MingMingFish): cpu.v / decoder.v / regfile.v / pc.v / MUX4to1_32bit.v / instr_memory.v
+    - 修正/統一命名方式
+    - 加入 Jamp(jal) 指令功能
+    - 新增 4 to 1 MUX module
+    - 模擬異常，待修正(220823)
