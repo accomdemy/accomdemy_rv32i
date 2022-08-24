@@ -1,7 +1,7 @@
 module instr_memory(
-    input [31:0] Addr,
+    input [31:0] addr,
     //output pc_en,
-    output [31:0] INST
+    output [31:0] prog
 );
 
     reg [7:0] INST_memory [0:1023];
@@ -18,10 +18,10 @@ module instr_memory(
         {INST_memory[20],   INST_memory[21],INST_memory[22],INST_memory[23]}=32'h00000000;
     end*/
 
-    assign INST = { INST_memory[Addr], 
-                    INST_memory[Addr+1],
-                    INST_memory[Addr+2],
-                    INST_memory[Addr+3] };
+    assign prog = { INST_memory[addr], 
+                    INST_memory[addr+1],
+                    INST_memory[addr+2],
+                    INST_memory[addr+3] };
 
     //assign pc_en = (INST == 32'h0) ? 1'b0 : 1'b1;
 
