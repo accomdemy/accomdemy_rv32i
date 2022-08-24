@@ -12,8 +12,8 @@ module cpu_tb;
     initial begin
         clk     = 0;
         
-        reset   = 1;
-        #5 reset = 0; 
+        reset   = 0;
+        #5 reset = 1; 
         
         forever #1 clk = ~clk; 
        
