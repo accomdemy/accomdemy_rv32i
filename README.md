@@ -46,6 +46,8 @@
 # 貢獻
 [![](https://avatars.githubusercontent.com/minexo79?size=64)](https://github.com/minexo79)
 [![](https://avatars.githubusercontent.com/MingMingFish?size=64)](https://github.com/MingMingFish)
+[![](https://avatars.githubusercontent.com/min4604?size=64)](https://github.com/min4604)
+[![](https://avatars.githubusercontent.com/be1ieve?size=64)](https://github.com/be1ieve)
 
 # 更新日誌
 ## 20220802 
@@ -66,3 +68,10 @@
     - 加入 Jamp(jal) 指令功能
     - 新增 4 to 1 MUX module
     - 模擬異常，待修正(220823)
+## 20220824
+- upload by [Will](https://github.com/be1ieve): MUX2to1_32bit.v / alu.v / cpu.v / decoder.v / instr_memory.v / pc.v
+    - 將命名名稱統一改為與圖片相同
+    - 新增 PC enable 線(pce)
+    - 修改圖片(加入pce)
+    - 修正 cpu.v 接線
+    - 更新 MUX2to1_32bit.v (加入always block)
