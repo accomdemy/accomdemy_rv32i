@@ -1,53 +1,53 @@
 module regfile(
     input               clk,
-    input               w_enable,
-    input               r1_enable,
-    input               r2_enable,
-    input               rst,
+    input               reset,
+    input               we,
+    input               re1,
+    input               re2,
 
-    input       [4:0]   rs1_addr,
-    input       [4:0]   rs2_addr,
-    input       [4:0]   wb_addr,
+    input       [4:0]   ra1,
+    input       [4:0]   ra2,
+    input       [4:0]   wa,
 
-    input      [31:0]   wb_data,
-    output reg [31:0]   rs1,
-    output reg [31:0]   rs2
+    input      [31:0]   wdata,
+    output reg [31:0]   data1,
+    output reg [31:0]   data2
 );
 
     reg        [31:0]   regfile [31:0];
 
     always@(posedge(clk)) begin
-        if (!rst) begin
-            if (w_enable && wb_addr != 0) begin
-                regfile[wb_addr] <= wb_data;
+        if (!reset) begin
+            if (we && wa != 0) begin
+                regfile[wa] <= wdata;
             end
         end
     end
 
     always@(*) begin
-        if(!r1_enable)
-            rs1 = 0;
-        else if (r1_enable && rs1_addr != 0) begin
-            if(w_enable && rs1_addr == wb_addr)
-                rs1 = wb_data;
+        if(!re1)
+            data1 = 0;
+        else if (re1 && ra1 != 0) begin
+            if(we && ra1 == wa)
+                data1 = wdata;
             else
-                rs1 = regfile[rs1_addr];
+                data1 = regfile[ra1];
         end
         else
-            rs1 = 0;
+            data1 = 0;
     end
 
     always@(*) begin
-        if(!r2_enable)
-            rs2 = 0;
-        else if (r2_enable && rs1_addr != 0) begin
-            if(w_enable && rs2_addr == wb_addr)
-                rs2 = wb_data;
+        if(!re2)
+            data2 = 0;
+        else if (re2 && ra2 != 0) begin
+            if(we && ra2 == wa)
+                data2 = wdata;
             else
-                rs2 = regfile[rs2_addr];
+                data2 = regfile[ra2];
         end
         else
-            rs1 = 0;
+            data2 = 0;
     end
 
 endmodule
