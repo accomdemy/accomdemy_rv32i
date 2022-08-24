@@ -16,15 +16,15 @@ module regfile(
 
     reg        [31:0]   regfile [31:0];
 
-    always@(posedge(clk)) begin
-        if (!reset) begin
+    always @(posedge(clk)) begin
+        if (reset) begin                // when reset is HIGH, enable write ability
             if (we && wa != 0) begin
                 regfile[wa] <= wdata;
             end
         end
     end
 
-    always@(*) begin
+    always @(*) begin
         if(!re1)
             data1 = 0;
         else if (re1 && ra1 != 0) begin
@@ -37,7 +37,7 @@ module regfile(
             data1 = 0;
     end
 
-    always@(*) begin
+    always @(*) begin
         if(!re2)
             data2 = 0;
         else if (re2 && ra2 != 0) begin
