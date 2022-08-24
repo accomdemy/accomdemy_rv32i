@@ -39,6 +39,7 @@ module cpu(
         .clk(clk),          // input external clock signal
         .reset(reset),      // input external reset signal
         .en(JUMP_ENABLE),   // input switch pc between pc_next and jmp
+        .jmp(ALU_OUTPUT),   // input caculate new pc from alu
         .pc(PC),            // output program counter
         .pc_next(PC_NEXT)   // output PC+4
     );
@@ -85,7 +86,7 @@ module cpu(
         .wa(WADDR),         // input register destination address
         
         // alu
-        .wdata(ALU_OUT),    // input register destination value
+        .wdata(ALU_OUTPUT),    // input register destination value
         //.wdata(WB_DATA),    // input register destination value  (not implemented)
         .data1(RS1),        // output register source 1 value
         .data2(RS2)         // output register source 2 value

@@ -35,7 +35,7 @@ module decoder(
     
     always@(*) begin
 
-        case(instr[6:0])                    // Type
+        case(prog[6:0])                    // Type
             7'b0110011: begin               // R-Type
 
                 ra1         = prog[19:15];  // rs1 implied
@@ -91,7 +91,7 @@ module decoder(
                 ra1         = prog[19:15];  // rs1 implied
                 ra2         = 5'b0;         // rs2 not implied
                 wa          = prog[11:7];   // rd implied
-                imm         = {{20{instr[31]}}, instr[31:20]};  // imm implied
+                imm         = {{20{prog[31]}}, prog[31:20]};  // imm implied
                 re1         = _enable;      // rs1 required
                 re2         = _disable;     // rs2 not used
                 we          = _enable;      // rd required
@@ -134,7 +134,7 @@ module decoder(
                 ra1         = 5'b0;  // rs1 not implied
                 ra2         = 5'b0;         // rs2 not implied
                 wa          = prog[11:7];   // rd implied
-                imm         = { {11{instr[31]}}, instr[31], instr[19:12], instr[20], instr[30:21], 1'b0 };  // imm implied
+                imm         = { {11{prog[31]}}, prog[31], prog[19:12], prog[20], prog[30:21], 1'b0 };  // imm implied
                 re1         = _disable;     // rs1 not used
                 re2         = _disable;     // rs2 not used
                 we          = _enable;      // rd required
