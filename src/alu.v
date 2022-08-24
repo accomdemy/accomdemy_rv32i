@@ -1,8 +1,8 @@
 module alu(
-    input      [31:0] a,
-    input      [31:0] b,
+    input      [31:0] data1,
+    input      [31:0] data2,
     input      [7:0]  op,
-    output reg [31:0] y
+    output reg [31:0] res
 );
 
     always@(*) begin
