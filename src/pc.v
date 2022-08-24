@@ -1,8 +1,8 @@
 module pc(
     input clk,
     input reset,
-    input [31:0] jump_addr,
-    input jump_enable,
+    input [31:0] jmp,
+    input en,
     output reg [31:0] pc_next,
     output reg [31:0] pc
 );
@@ -11,9 +11,9 @@ module pc(
             pc      <= 0;
             pc_next <= 0;
         end
-        else if (jump_enable) begin
-            pc      <= jump_addr;
-            pc_next <= jump_addr + 3'h4;
+        else if (en) begin
+            pc      <= jmp;
+            pc_next <= jmp + 3'h4;
         end
         else begin
             pc      <= pc_next;
