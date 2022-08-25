@@ -1,7 +1,8 @@
-00 90 05 13       	// addi x10 x0 9
-00 60 05 93       	// addi x11 x0 6
-00 b5 06 33       	// add x12 x10 x11
-40 b5 06 b3       	// sub x13 x10 x11
-00 d6 77 33       	// and x14 x12 x13
-04 60 08 13        	// addi x16 x0 70
-00 00 00 00		    // end
+00 10 02 93       	// addi t0 x0 1
+00 20 03 13       	// addi t1 x0 2 
+00 c0 00 ef      	// jal ra subroute_b
+00 62 83 b3       	// add t2 t0 t1
+00 c0 00 ef       	// jal ra end
+40 53 0e 33        	// sub t3 t1 t0
+ff 5f f0 ef		    // jal ra subroute_a
+00 00 00 13         // nop
