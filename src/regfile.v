@@ -28,9 +28,9 @@ module regfile(
         if(!re1)
             data1 = 0;
         else if (re1 && ra1 != 0) begin
-            if(we && ra1 == wa)
+            /*if(we && ra1 == wa)
                 data1 = wdata;
-            else
+            else*/
                 data1 = regfile[ra1];
         end
         else
@@ -41,9 +41,9 @@ module regfile(
         if(!re2)
             data2 = 0;
         else if (re2 && ra2 != 0) begin
-            if(we && ra2 == wa)
+            /*if(we && ra2 == wa)
                 data2 = wdata;
-            else
+            else*/
                 data2 = regfile[ra2];
         end
         else
