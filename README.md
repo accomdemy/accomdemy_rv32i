@@ -44,10 +44,7 @@
 </center>
 
 # 貢獻
-[![](https://avatars.githubusercontent.com/minexo79?size=64)](https://github.com/minexo79)
-[![](https://avatars.githubusercontent.com/MingMingFish?size=64)](https://github.com/MingMingFish)
-[![](https://avatars.githubusercontent.com/min4604?size=64)](https://github.com/min4604)
-[![](https://avatars.githubusercontent.com/be1ieve?size=64)](https://github.com/be1ieve)
+<img src="https://avatars.githubusercontent.com/minexo79" height=64 /> <img src="https://avatars.githubusercontent.com/MingMingFish" height=64 /> <img src="https://avatars.githubusercontent.com/min4604" height=64 /> <img src="https://avatars.githubusercontent.com/be1ieve" height=64 />
 
 # 更新日誌
 ## 20220802 
