@@ -1,16 +1,18 @@
 module decoder(
-    input       [31:0]      instr,
+    input       [31:0]      prog,   // risc-v opcode
 
-    output reg  [4:0]       rs1_addr,
-    output reg  [4:0]       rs2_addr,
-    output reg  [31:0]      imm_number,
-    output reg  [4:0]       w_addr,
-    output reg  [7:0]       aluop,
+    output reg  [4:0]       ra1,    // rs1 address
+    output reg  [4:0]       ra2,    // rs2 address
+    output reg  [31:0]      imm,    // reconstructed imm value
+    output reg  [4:0]       wa,     // rd address
+    output reg  [7:0]       op,     // alu opcode
 
-    output reg              r1_enable,
-    output reg              r2_enable,
-    output reg              w_enable,
-    output reg              imm_enable
+    output reg              re1,    // rs1 enable
+    output reg              re2,    // rs2 enable
+    output reg              we,     // rd enable
+    output reg              pce,    // mux_data1
+    output reg              imme,   // mux_data2
+    output reg              jmpe    // pc jump
 );
 
     // ALU OP
@@ -33,100 +35,127 @@ module decoder(
     
     always@(*) begin
 
-        case(instr[6:0])                    // Type
-            7'b0110011: begin               // R Type
+        case(prog[6:0])                    // Type
+            7'b0110011: begin               // R-Type
 
-                rs1_addr    = instr[19:15]; // rs1
-                rs2_addr    = instr[24:20]; // rs2
-                w_addr      = instr[11:7];  // rd
-                r1_enable   = _enable;
-                r2_enable   = _enable;
-                w_enable    = _enable;
-                imm_enable  = _disable;     // not r2_enable
+                ra1         = prog[19:15];  // rs1 implied
+                ra2         = prog[24:20];  // rs2 implied
+                wa          = prog[11:7];   // rd implied
+                imm         = 32'b0;        // imm not implied
+                re1         = _enable;      // rs1 required
+                re2         = _enable;      // rs2 required
+                we          = _enable;      // rd required
+                pce         = _disable;     // use rs1 on ALU-data1
+                imme        = _disable;     // use rs2 on ALU-data2
+                jmpe        = _disable;     // use pc+4 on PC
 
-                case(instr[14:12])          // Func3
+                case(prog[14:12])           // Func3
                     3'b000:                 // add / sub
-                        case(instr[31:25])  // Func7
+                        case(prog[31:25])   // Func7
                             7'b0000000:     // add
-                                aluop = 8'h1;
+                                op = 8'h1;
                             7'b0100000:     // sub
-                                aluop = 8'h2;
+                                op = 8'h2;
                             default: 
-                                aluop = 8'h0;
+                                op = 8'h0;
                         endcase
                     3'b001:                 // sll
-                        aluop = 8'h3;
+                        op = 8'h3;
                     3'b010:                 // slt
-                        aluop = 8'h4;   
+                        op = 8'h4;   
                     3'b011:                 // sltu
-                        aluop = 8'h5;
+                        op = 8'h5;
                     3'b100:                 // xor
-                        aluop = 8'h6;
+                        op = 8'h6;
                     3'b101:                 // srl / sra
-                        case(instr[31:25])  // Func7
+                        case(prog[31:25])  // Func7
                             7'b0000000:     // srl
-                                aluop = 8'h7;
+                                op = 8'h7;
                             7'b0100000:     // sra
-                                aluop = 8'h8;
+                                op = 8'h8;
                             default: 
-                                aluop = 8'h0;
+                                op = 8'h0;
                         endcase
                     3'b110:                 // or
-                        aluop = 8'h9;
+                        op = 8'h9;
                     3'b111:                 // and
-                        aluop = 8'ha;
+                        op = 8'ha;
                     default:  
-                        aluop = 8'h0;
+                        op = 8'h0;
                 endcase
             end
             /*
              * ========================================================
              */
-            7'b0010011: begin               // I Type
+            7'b0010011: begin               // I-Type
+                ra1         = prog[19:15];  // rs1 implied
+                ra2         = 5'b0;         // rs2 not implied
+                wa          = prog[11:7];   // rd implied
+                imm         = {{20{prog[31]}}, prog[31:20]};  // imm implied
+                re1         = _enable;      // rs1 required
+                re2         = _disable;     // rs2 not used
+                we          = _enable;      // rd required
+                pce         = _disable;     // use rs1 on ALU-data1
+                imme        = _enable;      // use imm on ALU-data2
+                jmpe        = _disable;     // use pc+4 on PC
 
-                rs1_addr    = instr[19:15]; // rs1
-                imm_number  = {{20{instr[31]}}, instr[31:20]};  // imm
-                w_addr      = instr[11:7];  // rd
-                r1_enable   = _enable;
-                r2_enable   = _disable;
-                w_enable    = _enable;
-                imm_enable  = _enable;      // r2_enable
-
-                case(instr[14:12])          // Func3
+                case(prog[14:12])          // Func3
                     3'b000:                 // addi
-                        aluop = 8'h1;
+                        op = 8'h1;
                     3'b001:                 // slli
-                        aluop = 8'h3;
+                        op = 8'h3;
                     3'b010:                 // slti
-                        aluop = 8'h4;   
+                        op = 8'h4;   
                     3'b011:                 // sltiu
-                        aluop = 8'h5;
+                        op = 8'h5;
                     3'b100:                 // xori
-                        aluop = 8'h6;
+                        op = 8'h6;
                     3'b101:                 // srli / srai
-                        case(instr[31:25])  // Func7
+                        case(prog[31:25])  // Func7
                             7'b0000000:     // srli
-                                aluop = 8'h7;
+                                op = 8'h7;
                             7'b0100000:     // srai
-                                aluop = 8'h8;
+                                op = 8'h8;
                             default: 
-                                aluop = 8'h0;
+                                op = 8'h0;
                         endcase
                     3'b110:                 // ori
-                        aluop = 8'h9;
+                        op = 8'h9;
                     3'b111:                 // andi
-                        aluop = 8'ha;
+                        op = 8'ha;
                     default:  
-                        aluop = 8'h0;
+                        op = 8'h0;
                 endcase
             end
             /*
              * ========================================================
              */
+            7'b1101111:   begin             // J-Type
+                ra1         = 5'b0;  // rs1 not implied
+                ra2         = 5'b0;         // rs2 not implied
+                wa          = prog[11:7];   // rd implied
+                imm         = { {11{prog[31]}}, prog[31], prog[19:12], prog[20], prog[30:21], 1'b0 };  // imm implied
+                re1         = _disable;     // rs1 not used
+                re2         = _disable;     // rs2 not used
+                we          = _enable;      // rd required
+                pce         = _enable;      // use pc on ALU-data1
+                imme        = _enable;      // use imm on ALU-data2
+                jmpe        = _enable;      // use jmp on PC
+                op          = 8'h1;         // data1 + data2
+            end
             default: 
             begin
-                aluop = 8'h0;
-                w_enable    = _disable;
+                ra1         = 5'b0;         // rs1 not implied
+                ra2         = 5'b0;         // rs2 not implied
+                wa          = 5'b0;         // rd not implied
+                imm         = 32'b0;        // imm not implied
+                re1         = _disable;     // rs1 not used
+                re2         = _disable;     // rs2 not used
+                we          = _disable;     // rd not used
+                pce         = _disable;     // use rs1 on ALU-data1
+                imme        = _disable;     // use rs2 on ALU-data2
+                jmpe        = _disable;     // use pc+4 on PC
+                op          = 8'h0;         // do nothing
             end
         endcase
     end

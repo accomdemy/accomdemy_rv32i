@@ -38,7 +38,7 @@
 而這個專案則會是跟著伴學松一起進行，在這段暑假內會根據每個階段增加/修改專案內的Module，最終變成一顆可以在Vivado合成運行的CPU。
 
 # 架構圖
-> 更新日期：2022/8/17
+> 更新日期：2022/8/23
 <center>
     <img src="./img/cpu.png" />
 </center>
@@ -46,6 +46,8 @@
 # 貢獻
 [![](https://avatars.githubusercontent.com/minexo79?size=64)](https://github.com/minexo79)
 [![](https://avatars.githubusercontent.com/MingMingFish?size=64)](https://github.com/MingMingFish)
+[![](https://avatars.githubusercontent.com/min4604?size=64)](https://github.com/min4604)
+[![](https://avatars.githubusercontent.com/be1ieve?size=64)](https://github.com/be1ieve)
 
 # 更新日誌
 ## 20220802 
@@ -60,3 +62,16 @@
 - upload by [謝祥辰](https://github.com/min4604): pc.v / inst_rom.v / MUX2to1_32bit.v
     - 新增 pc.v / inst_rom.v / MUX2to1_32bit.v
     - 修改 cpu.v / cpu_tb.v
+## 20220823
+- upload by [Mingming](https://github.com/MingMingFish): cpu.v / decoder.v / regfile.v / pc.v / MUX4to1_32bit.v / instr_memory.v
+    - 修正/統一命名方式
+    - 加入 Jamp(jal) 指令功能
+    - 新增 4 to 1 MUX module
+    - 模擬異常，待修正(220823)
+## 20220824
+- upload by [Will](https://github.com/be1ieve): MUX2to1_32bit.v / alu.v / cpu.v / decoder.v / instr_memory.v / pc.v
+    - 將命名名稱統一改為與圖片相同
+    - 新增 PC enable 線(pce)
+    - 修改圖片(加入pce)
+    - 修正 cpu.v 接線
+    - 更新 MUX2to1_32bit.v (加入always block)
