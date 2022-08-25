@@ -130,8 +130,8 @@ module decoder(
             /*
              * ========================================================
              */
-            7'b1101111:   begin             // J-Type
-                ra1         = 5'b0;  // rs1 not implied
+            7'b1101111:   begin             // J-Type : JAL
+                ra1         = 5'b0;         // rs1 not implied
                 ra2         = 5'b0;         // rs2 not implied
                 wa          = prog[11:7];   // rd implied
                 imm         = { {11{prog[31]}}, prog[31], prog[19:12], prog[20], prog[30:21], 1'b0 };  // imm implied
@@ -143,8 +143,22 @@ module decoder(
                 jmpe        = _enable;      // use jmp on PC
                 op          = 8'h1;         // data1 + data2
             end
-            default: 
-            begin
+
+            7'b1100111: begin               // I-Type : JALR
+                ra1         = prog[19:15];  // rs1 implied
+                ra2         = 5'b0;         // rs2 not implied
+                wa          = prog[11:7];   // rd implied
+                imm         = { {20{prog[31]}}, prog[31:20] };  // imm implied
+                re1         = _enable;      // rs1 used
+                re2         = _disable;     // rs2 not used
+                we          = _enable;      // rd required
+                pce         = _disable;     // use pc on ALU-data1
+                imme        = _enable;      // use imm on ALU-data2
+                jmpe        = _enable;      // use jmp on PC
+                op          = 8'h1;         // data1 + data2
+            end
+
+            default: begin
                 ra1         = 5'b0;         // rs1 not implied
                 ra2         = 5'b0;         // rs2 not implied
                 wa          = 5'b0;         // rd not implied
