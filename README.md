@@ -71,4 +71,4 @@
     - 新增 PC enable 線(pce)
     - 修改圖片(加入pce)
     - 修正 cpu.v 接線
-    - 更新 MUX2to1_32bit.v (加入always block)
+    - 更新 MUX4to1_32bit.v (加入always block)
