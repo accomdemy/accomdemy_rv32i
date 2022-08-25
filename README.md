@@ -38,9 +38,9 @@
 而這個專案則會是跟著伴學松一起進行，在這段暑假內會根據每個階段增加/修改專案內的Module，最終變成一顆可以在Vivado合成運行的CPU。
 
 # 架構圖
-> 更新日期：2022/8/23
+> 更新日期：2022/8/25
 <center>
-    <img src="./img/cpu.png" />
+    <img src="./img/cpu.svg" />
 </center>
 
 # 貢獻
@@ -72,3 +72,7 @@
     - 修改圖片(加入pce)
     - 修正 cpu.v 接線
     - 更新 MUX4to1_32bit.v (加入always block)
+## 20220825
+- upload by [Blackcat](https://github.com/minexo79): cpu.svg / cpu.drawio / cpu.png / decoder.v
+    - 修正架構圖，放上Draw.io原始檔
+    - 補回 JALR 指令
