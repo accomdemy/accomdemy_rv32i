@@ -158,7 +158,7 @@ module decoder(
                 op          = 8'h1;         // data1 + data2
             end
 
-            7'b1100111: begin               // U-Type : LUI
+            7'b0110111: begin               // U-Type : LUI
                 ra1         = 5'b0;         // rs1 not implied, but forced to use X0
                 ra2         = 5'b0;         // rs2 not implied
                 wa          = prog[11:7];   // rd implied

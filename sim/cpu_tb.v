@@ -19,7 +19,7 @@ module cpu_tb;
        
     end
     initial begin
-        #50 $stop;
+        #60 $stop;
         #1 $finish;
     end
       

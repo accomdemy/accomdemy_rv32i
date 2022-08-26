@@ -1,0 +1,26 @@
+00 10 02 93		// li t0 1
+01 10 03 13		// li t1 0x11
+00 62 83 33		// add t1 t0 t1
+00 00 00 13		// (Now t1/x6 is 0x12)
+13 50 03 93		// li t2 0x135
+40 63 83 b3		// sub t2 t2 t1
+00 00 00 13		// (Now t2/x7 is 0x123)
+01 63 9e 13		// slli t3 t2 0x16
+00 6e 5e 33		// srl t3 t3 t1
+00 4e 6e 13		// ori t3 t3 4
+00 00 00 13		// (Now t3/x28 is 0x1234)
+00 0e 0e 93		// addi t4 t3 0
+00 01 2e b7		// lui t4 0x12
+34 5e 8e 93		// addi t4 t4 0x345
+00 00 00 13		// (Now t4/x29 is 0x12345)
+ff f0 0f 13		// li t5 -1
+40 5f 5f 33		// sra t5 t5 t0
+00 ff 5f 13		// srli t5 t5 15
+00 00 00 13		// (Now t5 is 0x1ffff)
+01 df 7e b3		// and t4 t5 t4
+00 00 00 13		// (Now t4/x29 should still be 0x12345)
+12 3e cf 13		// xori t5 t4 0x123
+00 00 00 13		// (Now t5/x30 is 0x12266)
+00 7f 4f 33		// xor t5 t5 t2
+00 00 00 13		// (Now t5/x30 is 0x12345)
+
