@@ -13,7 +13,7 @@ def tranlate(text):
     output_list = dict([[i,""] for i in range(0,max([i[0] for i in hex_code_list]),4)])
     for index,hex_index,hex_code,comment in hex_code_list:
         hex_code = " ".join([hex_code[j-2:j] for j in range((len(hex_code)),0,-2)])
-        output_list[index] = "%s \\\\ \t %s: %s"%(hex_code,hex_index,comment) 
+        output_list[index] = "%s //\t %s: %s"%(hex_code,hex_index,comment) 
     # for index,hex_index, in hex_code_list:
     return "\n".join(output_list.values())
 
