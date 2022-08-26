@@ -7,7 +7,7 @@ module instr_memory(
     reg [7:0] INST_memory [0:1023];
 
     // ./INST_rom.txt
-    initial $readmemh("INST_rom.txt", INST_memory);
+    initial $readmemh("test_instructions.txt", INST_memory);
     
     /*initial begin
         {INST_memory[0],    INST_memory[1], INST_memory[2], INST_memory[3]} =32'h00900513;

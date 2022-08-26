@@ -22,7 +22,7 @@ module alu(
             8'h7:           // srl / srli
                 res = data1 >> data2;
             8'h8:           // sra / srai
-                res = $signed(data1) >> data2;
+                res = $signed(data1) >>> data2;
             8'h9:           // or / ori
                 res = data1 | data2;
             8'ha:           // and / andi
