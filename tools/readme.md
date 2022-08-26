@@ -40,3 +40,11 @@
 主程序： main.py
 
 修改main.py中的text变量，存放executable code, 执行，结果会打印在console中。
+
+# 更新日志
+
+## 20220827
+
+* 自动做大小端byte的转换
+* 自动在mem文件中添加asm指令comment
+* 兼容非0地址起始的程序, 如C语言编译的程序
