@@ -5,14 +5,21 @@ import re
 with open("executable_code.txt", "r") as f:
     text = f.read()
 
-# 通过正则表达式将hex code提取出来
-hex_code_list = re.findall(":\s+([0-9a-fA-F]+)\s+",text)
-# 将hex code将转换为mem格式
-mem = ["%s %s %s %s"%(i[:2],i[2:4],i[4:6],i[6:]) for i in hex_code_list]
-mem_text = ("\n".join(mem))
+import re
+def tranlate(text):
+    # 通过正则表达式将hex code提取出来
+    hex_code_list = re.findall("([0-9a-fA-F]+):\s+([0-9a-fA-F]+)\s+(\w[^\n]+)",text)
+    hex_code_list = [(int(i[0],16),)+i for i in hex_code_list]
+    output_list = dict([[i,""] for i in range(0,max([i[0] for i in hex_code_list]),4)])
+    for index,hex_index,hex_code,comment in hex_code_list:
+        hex_code = " ".join([hex_code[j-2:j] for j in range((len(hex_code)),0,-2)])
+        output_list[index] = "%s \\\\ \t %s: %s"%(hex_code,hex_index,comment) 
+    # for index,hex_index, in hex_code_list:
+    return "\n".join(output_list.values())
 
+mem = tranlate(text)
 
 with open("mem.txt", "w") as f:
-    f.write(mem_text)
+    f.write(mem)
 
 print("success!! pls check the file named mem.txt")
