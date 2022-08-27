@@ -10,10 +10,10 @@ def tranlate(text):
     # 通过正则表达式将hex code提取出来
     hex_code_list = re.findall("([0-9a-fA-F]+):\s+([0-9a-fA-F]+)\s+(\w[^\n]+)",text)
     hex_code_list = [(int(i[0],16),)+i for i in hex_code_list]
-    output_list = dict([[i,""] for i in range(0,max([i[0] for i in hex_code_list]),4)])
+    output_list = dict([[i,"00 00 00 00 // %s:"%hex(i)] for i in range(0,max([i[0] for i in hex_code_list]),4)])
     for index,hex_index,hex_code,comment in hex_code_list:
         hex_code = " ".join([hex_code[j-2:j] for j in range((len(hex_code)),0,-2)])
-        output_list[index] = "%s //\t %s: %s"%(hex_code,hex_index,comment) 
+        output_list[index] = "%s //\t %s: %s"%(hex_code,hex(index),comment) 
     # for index,hex_index, in hex_code_list:
     return "\n".join(output_list.values())
 
