@@ -44,7 +44,7 @@
 </center>
 
 # 貢獻
-<img src="https://avatars.githubusercontent.com/minexo79" height=64 /> <img src="https://avatars.githubusercontent.com/MingMingFish" height=64 /> <img src="https://avatars.githubusercontent.com/min4604" height=64 /> <img src="https://avatars.githubusercontent.com/be1ieve" height=64 />
+<img src="https://avatars.githubusercontent.com/minexo79" height=64 /> <img src="https://avatars.githubusercontent.com/MingMingFish" height=64 /> <img src="https://avatars.githubusercontent.com/min4604" height=64 /> <img src="https://avatars.githubusercontent.com/be1ieve" height=64 /> <img src="https://avatars.githubusercontent.com/375432636" height=64 />
 
 # 更新日誌
 ## 20220802 
@@ -76,3 +76,6 @@
 - upload by [Blackcat](https://github.com/minexo79): cpu.svg / cpu.drawio / cpu.png / decoder.v
     - 修正架構圖，放上Draw.io原始檔
     - 補回 JALR 指令
+## 20220828
+- upload by [375432636](https://github.com/375432636): risev_executable_code_to_hex
+    - 新增 risev_executable_code_to_hex 轉換工具 (感謝tom12138)
