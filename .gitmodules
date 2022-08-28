@@ -1,0 +1,3 @@
+[submodule "tools"]
+	path = tools
+	url = git@github.com:375432636/risev_executable_code_to_hex.git
