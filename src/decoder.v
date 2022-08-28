@@ -158,6 +158,34 @@ module decoder(
                 op          = 8'h1;         // data1 + data2
             end
 
+            7'b0110111: begin               // U-Type : LUI
+                ra1         = 5'b0;         // rs1 not implied, but forced to use X0
+                ra2         = 5'b0;         // rs2 not implied
+                wa          = prog[11:7];   // rd implied
+                imm         = { prog[31:12], 12'b0 };  // imm implied
+                re1         = _enable;      // forced to use X0, expecting 32'b0
+                re2         = _disable;     // rs2 not used
+                we          = _enable;      // rd required
+                pce         = _disable;     // expecting 32'b0 on ALU-data1
+                imme        = _enable;      // use imm on ALU-data2
+                jmpe        = _disable;      // use pc+4 on PC
+                op          = 8'h1;         // data1 + data2
+            end
+
+            7'b0010111: begin               // U-Type : AUIPC
+                ra1         = 5'b0;         // rs1 not implied
+                ra2         = 5'b0;         // rs2 not implied
+                wa          = prog[11:7];   // rd implied
+                imm         = { prog[31:12], 12'b0 };  // imm implied
+                re1         = _disable;     // rs1 not used
+                re2         = _disable;     // rs2 not used
+                we          = _enable;      // rd required
+                pce         = _enable;      // use pc on ALU-data1
+                imme        = _enable;      // use imm on ALU-data2
+                jmpe        = _disable;     // use pc+4 on PC
+                op          = 8'h1;         // data1 + data2
+            end
+
             default: begin
                 ra1         = 5'b0;         // rs1 not implied
                 ra2         = 5'b0;         // rs2 not implied

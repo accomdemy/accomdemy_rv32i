@@ -14,6 +14,11 @@
 - [更新日誌](#更新日誌)
     - [20220802](#20220802)
     - [20220804](#20220804)
+    - [20220811](#20220811)
+    - [20220823](#20220823)
+    - [20220824](#20220824)
+    - [20220825](#20220825)
+    - [20220828](#20220828)
 
 # [關於伴伴學](https://hackmd.io/@accomdemy/SJsr63mkt)
 伴伴學 Accomdemy 是由一群來自科技圈、新創圈、教育圈的夥伴們自發性組成的自學組織。
@@ -44,7 +49,7 @@
 </center>
 
 # 貢獻
-<img src="https://avatars.githubusercontent.com/minexo79" height=64 /> <img src="https://avatars.githubusercontent.com/MingMingFish" height=64 /> <img src="https://avatars.githubusercontent.com/min4604" height=64 /> <img src="https://avatars.githubusercontent.com/be1ieve" height=64 />
+<img src="https://avatars.githubusercontent.com/minexo79" height=64 /> <img src="https://avatars.githubusercontent.com/MingMingFish" height=64 /> <img src="https://avatars.githubusercontent.com/min4604" height=64 /> <img src="https://avatars.githubusercontent.com/be1ieve" height=64 /> <img src="https://avatars.githubusercontent.com/375432636" height=64 />
 
 # 更新日誌
 ## 20220802 
@@ -76,3 +81,6 @@
 - upload by [Blackcat](https://github.com/minexo79): cpu.svg / cpu.drawio / cpu.png / decoder.v
     - 修正架構圖，放上Draw.io原始檔
     - 補回 JALR 指令
+## 20220828
+- upload by [375432636](https://github.com/375432636): risev_executable_code_to_hex
+    - 新增 risev_executable_code_to_hex 轉換工具 (感謝tom12138)
