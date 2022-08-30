@@ -99,8 +99,8 @@ module cpu(
         
         // alu
         .wdata(WB_DATA),    // input register destination value  (not implemented)
-        .data1(RS1),        // output register source 1 value
-        .data2(RS2)         // output register source 2 value
+        .rs1(RS1),        // output register source 1 value
+        .rs2(RS2)         // output register source 2 value
     );
 
     // pc - alu_data1
