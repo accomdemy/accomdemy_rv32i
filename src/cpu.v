@@ -11,6 +11,13 @@ module cpu(
     // decoder - program counter
     wire        JUMP_ENABLE;
 
+    // decoder - branch
+    wire        BRANCH_ENABLE;
+    wire [2:0]  BRANCH_OPCODE;
+
+    // branch - program counter
+    wire        BRANCH_JUMP_ENABLE;
+
     // program counter - inst fetch - decoder
     wire [31:0] PC_NEXT;
     wire [31:0] PC;
@@ -36,12 +43,21 @@ module cpu(
     // wire [31:0] WB_DATA; // not implemented
 
     pc pc(
-        .clk(clk),          // input external clock signal
-        .reset(reset),      // input external reset signal
-        .en(JUMP_ENABLE),   // input switch pc between pc_next and jmp
-        .jmp(ALU_OUTPUT),   // input caculate new pc from alu
-        .pc(PC),            // output program counter
-        .pc_next(PC_NEXT)   // output PC+4
+        .clk(clk),                  // input external clock signal
+        .reset(reset),              // input external reset signal
+        .en(JUMP_ENABLE),           // input switch pc between pc_next and jmp
+        .branch_en(BRANCH_JUMP_ENABLE),// input switch pc between pc_next and jmp
+        .jmp(ALU_OUTPUT),           // input caculate new pc from alu
+        .pc(PC),                    // output program counter
+        .pc_next(PC_NEXT)           // output PC+4
+    );
+
+    branch branch(
+        .en(BRANCH_ENABLE),         // input decoder
+        .op(BRANCH_OPCODE),         // input decoder
+        .out(BRANCH_JUMP_ENABLE),   // output pc
+        .data1(RS1),                // input register
+        .data2(RS2)                 // input register
     );
 
     instr_memory instr_memory(
@@ -65,7 +81,9 @@ module cpu(
         .imm(IMM_NUMBER),   // output immediate number
         .imme(IMM_ENABLE),  // output switch alu-data2 between register source 2 and immediate number
         .pce(PC_ENABLE),    // output switch alu-data1 between register source 1 and program counter
-        .op(OPCODE),        // output alu opcode
+        .aluop(OPCODE),     // output alu opcode
+        .bop(BRANCH_OPCODE),// output branch opcode
+        .be(BRANCH_ENABLE),  // branch enable
 
         // program counter
         .jmpe(JUMP_ENABLE)  // output switch pc between pc_next and jmp
