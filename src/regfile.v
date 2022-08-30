@@ -50,4 +50,11 @@ module regfile(
             data2 = 0;
     end
 
+    integer  i;
+    initial begin
+        for (i = 0; i<=31 ; i=i+1) begin
+            regfile[i] = 'b0;
+        end
+    end
+
 endmodule
