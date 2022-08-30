@@ -5,14 +5,16 @@ module decoder(
     output reg  [4:0]       ra2,    // rs2 address
     output reg  [31:0]      imm,    // reconstructed imm value
     output reg  [4:0]       wa,     // rd address
-    output reg  [7:0]       op,     // alu opcode
+    output reg  [7:0]       aluop,  // alu opcode
 
     output reg              re1,    // rs1 enable
     output reg              re2,    // rs2 enable
     output reg              we,     // rd enable
     output reg              pce,    // mux_data1
     output reg              imme,   // mux_data2
-    output reg              jmpe    // pc jump
+    output reg              jmpe,   // pc jump
+    output reg              be,     // branch enable
+    output reg  [2:0]       bop     // opcode funct3 as branch op
 );
 
     // ALU OP
@@ -48,40 +50,42 @@ module decoder(
                 pce         = _disable;     // use rs1 on ALU-data1
                 imme        = _disable;     // use rs2 on ALU-data2
                 jmpe        = _disable;     // use pc+4 on PC
+                be          = _disable;     // branch disabled
+                bop         = 3'b000;       // branch disabled
 
                 case(prog[14:12])           // Func3
                     3'b000:                 // add / sub
                         case(prog[31:25])   // Func7
                             7'b0000000:     // add
-                                op = 8'h1;
+                                aluop = 8'h1;
                             7'b0100000:     // sub
-                                op = 8'h2;
+                                aluop = 8'h2;
                             default: 
-                                op = 8'h0;
+                                aluop = 8'h0;
                         endcase
                     3'b001:                 // sll
-                        op = 8'h3;
+                        aluop = 8'h3;
                     3'b010:                 // slt
-                        op = 8'h4;   
+                        aluop = 8'h4;   
                     3'b011:                 // sltu
-                        op = 8'h5;
+                        aluop = 8'h5;
                     3'b100:                 // xor
-                        op = 8'h6;
+                        aluop = 8'h6;
                     3'b101:                 // srl / sra
                         case(prog[31:25])  // Func7
                             7'b0000000:     // srl
-                                op = 8'h7;
+                                aluop = 8'h7;
                             7'b0100000:     // sra
-                                op = 8'h8;
+                                aluop = 8'h8;
                             default: 
-                                op = 8'h0;
+                                aluop = 8'h0;
                         endcase
                     3'b110:                 // or
-                        op = 8'h9;
+                        aluop = 8'h9;
                     3'b111:                 // and
-                        op = 8'ha;
+                        aluop = 8'ha;
                     default:  
-                        op = 8'h0;
+                        aluop = 8'h0;
                 endcase
             end
             /*
@@ -98,33 +102,35 @@ module decoder(
                 pce         = _disable;     // use rs1 on ALU-data1
                 imme        = _enable;      // use imm on ALU-data2
                 jmpe        = _disable;     // use pc+4 on PC
+                be          = _disable;     // branch disabled
+                bop         = 3'b000;       // branch disabled
 
                 case(prog[14:12])          // Func3
                     3'b000:                 // addi
-                        op = 8'h1;
+                        aluop = 8'h1;
                     3'b001:                 // slli
-                        op = 8'h3;
+                        aluop = 8'h3;
                     3'b010:                 // slti
-                        op = 8'h4;   
+                        aluop = 8'h4;   
                     3'b011:                 // sltiu
-                        op = 8'h5;
+                        aluop = 8'h5;
                     3'b100:                 // xori
-                        op = 8'h6;
+                        aluop = 8'h6;
                     3'b101:                 // srli / srai
                         case(prog[31:25])  // Func7
                             7'b0000000:     // srli
-                                op = 8'h7;
+                                aluop = 8'h7;
                             7'b0100000:     // srai
-                                op = 8'h8;
+                                aluop = 8'h8;
                             default: 
-                                op = 8'h0;
+                                aluop = 8'h0;
                         endcase
                     3'b110:                 // ori
-                        op = 8'h9;
+                        aluop = 8'h9;
                     3'b111:                 // andi
-                        op = 8'ha;
+                        aluop = 8'ha;
                     default:  
-                        op = 8'h0;
+                        aluop = 8'h0;
                 endcase
             end
             /*
@@ -141,7 +147,9 @@ module decoder(
                 pce         = _enable;      // use pc on ALU-data1
                 imme        = _enable;      // use imm on ALU-data2
                 jmpe        = _enable;      // use jmp on PC
-                op          = 8'h1;         // data1 + data2
+                aluop       = 8'h1;         // data1 + data2
+                be          = _disable;     // branch disabled
+                bop         = 3'b000;       // branch disabled
             end
 
             7'b1100111: begin               // I-Type : JALR
@@ -155,7 +163,9 @@ module decoder(
                 pce         = _disable;     // use pc on ALU-data1
                 imme        = _enable;      // use imm on ALU-data2
                 jmpe        = _enable;      // use jmp on PC
-                op          = 8'h1;         // data1 + data2
+                aluop       = 8'h1;         // data1 + data2
+                be          = _disable;     // branch disabled
+                bop         = 3'b000;       // branch disabled
             end
 
             7'b0110111: begin               // U-Type : LUI
@@ -169,7 +179,9 @@ module decoder(
                 pce         = _disable;     // expecting 32'b0 on ALU-data1
                 imme        = _enable;      // use imm on ALU-data2
                 jmpe        = _disable;      // use pc+4 on PC
-                op          = 8'h1;         // data1 + data2
+                aluop       = 8'h1;         // data1 + data2
+                be          = _disable;     // branch disabled
+                bop         = 3'b000;       // branch disabled
             end
 
             7'b0010111: begin               // U-Type : AUIPC
@@ -183,7 +195,25 @@ module decoder(
                 pce         = _enable;      // use pc on ALU-data1
                 imme        = _enable;      // use imm on ALU-data2
                 jmpe        = _disable;     // use pc+4 on PC
-                op          = 8'h1;         // data1 + data2
+                aluop       = 8'h1;         // data1 + data2
+                be          = _disable;     // branch disabled
+                bop         = 3'b000;       // branch disabled
+            end
+
+            7'b1100011: begin               // B-Type
+                ra1         = prog[19:15];  // rs1 implied
+                ra2         = prog[24:20];  // rs2 implied
+                wa          = 5'b0;         // rd not implied
+                imm         = {{20{prog[31]}},prog[7],prog[30:25],prog[11:8],1'b0};  // imm implied
+                re1         = _enable;      // rs1 required
+                re2         = _enable;      // rs2 required
+                we          = _disable;     // rd not required
+                pce         = _enable;      // use pc on ALU-data1
+                imme        = _enable;      // use imm on ALU-data2
+                jmpe        = _disable;     // use pc+4 on PC
+                aluop       = 8'h1;         // data1 + data2
+                be          = _enable;      // branch enabled
+                bop         = prog[14:12];  // branch enabled
             end
 
             default: begin
@@ -197,7 +227,9 @@ module decoder(
                 pce         = _disable;     // use rs1 on ALU-data1
                 imme        = _disable;     // use rs2 on ALU-data2
                 jmpe        = _disable;     // use pc+4 on PC
-                op          = 8'h0;         // do nothing
+                aluop       = 8'h0;         // do nothing
+                be          = _disable;     // branch disabled
+                bop         = 3'b000;       // branch disabled
             end
         endcase
     end

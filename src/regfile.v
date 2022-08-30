@@ -16,6 +16,12 @@ module regfile(
 
     reg        [31:0]   regfile [31:0];
 
+    initial begin
+        for(integer idx=0;idx<32;idx=idx+1) begin
+            regfile[idx] = 32'b0;
+        end
+    end
+
     always @(posedge(clk)) begin
         if (reset) begin                // when reset is HIGH, enable write ability
             if (we && wa != 0) begin
