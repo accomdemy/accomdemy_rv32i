@@ -1,26 +1,30 @@
-00 10 02 93		// li t0 1
-01 10 03 13		// li t1 0x11
-00 62 83 33		// add t1 t0 t1
-00 00 00 13		// (Now t1/x6 is 0x12)
-13 50 03 93		// li t2 0x135
-40 63 83 b3		// sub t2 t2 t1
-00 00 00 13		// (Now t2/x7 is 0x123)
-01 63 9e 13		// slli t3 t2 0x16
-00 6e 5e 33		// srl t3 t3 t1
-00 4e 6e 13		// ori t3 t3 4
-00 00 00 13		// (Now t3/x28 is 0x1234)
-00 0e 0e 93		// addi t4 t3 0
-00 01 2e b7		// lui t4 0x12
-34 5e 8e 93		// addi t4 t4 0x345
-00 00 00 13		// (Now t4/x29 is 0x12345)
-ff f0 0f 13		// li t5 -1
-40 5f 5f 33		// sra t5 t5 t0
-00 ff 5f 13		// srli t5 t5 15
-00 00 00 13		// (Now t5 is 0x1ffff)
-01 df 7e b3		// and t4 t5 t4
-00 00 00 13		// (Now t4/x29 should still be 0x12345)
-12 3e cf 13		// xori t5 t4 0x123
-00 00 00 13		// (Now t5/x30 is 0x12266)
-00 7f 4f 33		// xor t5 t5 t2
-00 00 00 13		// (Now t5/x30 is 0x12345)
-
+00 40 00 6f //	 0x0: jal x0 4 <count_in_t0>
+04 00 05 13 //	 0x4: addi x10 x0 64
+03 f0 05 93 //	 0x8: addi x11 x0 63
+00 00 02 93 //	 0xc: addi x5 x0 0
+00 15 85 93 //	 0x10: addi x11 x11 1
+00 12 82 93 //	 0x14: addi x5 x5 1
+fe b5 0c e3 //	 0x18: beq x10 x11 -8
+ff 00 06 13 //	 0x1c: addi x12 x0 -16
+fe e0 06 93 //	 0x20: addi x13 x0 -18
+00 00 03 13 //	 0x24: addi x6 x0 0
+00 16 86 93 //	 0x28: addi x13 x13 1
+00 13 03 13 //	 0x2c: addi x6 x6 1
+fe d6 1c e3 //	 0x30: bne x12 x13 -8
+00 10 05 13 //	 0x34: addi x10 x0 1
+ff f0 05 93 //	 0x38: addi x11 x0 -1
+00 00 03 93 //	 0x3c: addi x7 x0 0
+00 15 85 93 //	 0x40: addi x11 x11 1
+00 13 83 93 //	 0x44: addi x7 x7 1
+fe b5 5c e3 //	 0x48: bge x10 x11 -8
+01 00 06 93 //	 0x4c: addi x13 x0 16
+ff 00 07 13 //	 0x50: addi x14 x0 -16
+00 00 0e 13 //	 0x54: addi x28 x0 0
+00 15 85 93 //	 0x58: addi x11 x11 1
+00 1e 0e 13 //	 0x5c: addi x28 x28 1
+fe e6 fc e3 //	 0x60: bgeu x13 x14 -8
+00 00 0e 93 //	 0x64: addi x29 x0 0
+00 5e 8e b3 //	 0x68: add x29 x29 x5
+00 6e 8e b3 //	 0x6c: add x29 x29 x6
+00 7e 8e b3 //	 0x70: add x29 x29 x7
+01 ce 8e b3 //	 0x74: add x29 x29 x28

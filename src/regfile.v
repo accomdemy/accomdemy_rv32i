@@ -10,11 +10,17 @@ module regfile(
     input       [4:0]   wa,
 
     input      [31:0]   wdata,
-    output reg [31:0]   data1,
-    output reg [31:0]   data2
+    output reg [31:0]   rs1,
+    output reg [31:0]   rs2
 );
 
     reg        [31:0]   regfile [31:0];
+
+    initial begin
+        for(integer idx=0;idx<32;idx=idx+1) begin
+            regfile[idx] = 32'b0;
+        end
+    end
 
     always @(posedge(clk)) begin
         if (reset) begin                // when reset is HIGH, enable write ability
@@ -26,28 +32,28 @@ module regfile(
 
     always @(*) begin
         if(!re1)
-            data1 = 0;
+            rs1 = 0;
         else if (re1 && ra1 != 0) begin
             /*if(we && ra1 == wa)
-                data1 = wdata;
+                rs1 = wdata;
             else*/
-                data1 = regfile[ra1];
+                rs1 = regfile[ra1];
         end
         else
-            data1 = 0;
+            rs1 = 0;
     end
 
     always @(*) begin
         if(!re2)
-            data2 = 0;
+            rs2 = 0;
         else if (re2 && ra2 != 0) begin
             /*if(we && ra2 == wa)
-                data2 = wdata;
+                rs2 = wdata;
             else*/
-                data2 = regfile[ra2];
+                rs2 = regfile[ra2];
         end
         else
-            data2 = 0;
+            rs2 = 0;
     end
 
 endmodule

@@ -8,9 +8,9 @@ module alu(
     always@(*) begin
         case(op)                  
             8'h1:           // add / addi
-                res = data1 + data2;      
+                res = $signed(data1) + $signed(data2);      
             8'h2:           // sub
-                res = data1 - data2;
+                res = $signed(data1) - $signed(data2);
             8'h3:           // sll / slli
                 res = data1 << data2;
             8'h4:           // slt / slti

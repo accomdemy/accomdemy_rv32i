@@ -2,7 +2,8 @@ module pc(
     input clk,
     input reset,
     input [31:0] jmp,
-    input en,
+    input jmp_en,
+    input branch_en,
     output reg [31:0] pc_next,
     output reg [31:0] pc
 );
@@ -11,7 +12,7 @@ module pc(
             pc      <= 0;
             pc_next <= 0;
         end
-        else if (en) begin
+        else if (jmp_en | branch_en) begin
             pc      <= jmp;
             pc_next <= jmp + 3'h4;
         end
