@@ -165,7 +165,7 @@ module cpu(
         .clk(clk),                      // for SAVE till next clock
         .dm_addr(MEM_DATA_ADDR),        // from ALU output
         .data_in(MEM_DATA_IN),          // from register rs2
-        .data_out(MEM_DATA_OUT)    // to mux_wb
+        .data_out_buff(MEM_DATA_OUT)    // to mux_wb
 );
 
 endmodule
