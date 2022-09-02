@@ -15,6 +15,14 @@ module cpu(
     wire [31:0] PC_NEXT;
     wire [31:0] PC;
     
+    //ram coutrol
+    wire [2:0]  DM_OP; 
+    wire        DM_WRITE_ENABLE; 
+    wire [31:0] MEM_DATA_ADDR;
+    wire [31:0] MEM_DATA_IN;
+    wire [31:0] MEM_DATA_OUT;
+    wire        MEM_DATA_OUT_ENABLE;
+    
     // decoder - register
     wire [31:0] INST;
     wire [4:0]  RS1_ADDR;
@@ -80,7 +88,12 @@ module cpu(
 
         // branch
         .be(BRANCH_MODULE_EN),  // output enable branch when b-type
-        .bop(BRANCH_OP)         // output opcode funct3 for branch
+        .bop(BRANCH_OP),        // output opcode funct3 for branch
+
+        // mem 
+        .mwe(DM_WRITE_ENABLE),   // output enable mem when i-type and s-type
+        .dmop(DM_OP),            // output opcode funct3 for mem
+        .doe(MEM_DATA_OUT_ENABLE)// output enable register
     );
 
     regfile register(
@@ -122,12 +135,11 @@ module cpu(
     MUX4to1_32bit mux_wb(
         .I0(ALU_OUTPUT),
         .I1(PC_NEXT),
-        .I2(0),
+        .I2(MEM_DATA_OUT),
         .I3(0),
-        .s({1'b0,JUMP_ENABLE}),
+        .s({MEM_DATA_OUT_ENABLE,JUMP_ENABLE}),
         .f(WB_DATA)
     );
-
 
     alu alu0(
         .data1(DATA1),      // input from mux_data1
@@ -143,5 +155,17 @@ module cpu(
         .data2(RS2),            // register source 2 value
         .out(BRANCH_EN)         // output jump to new address
     );
+
+    assign MEM_DATA_ADDR = ALU_OUTPUT;
+    assign MEM_DATA_IN   = RS2;
+    dm_control dm_control0 (
+        .dop(DM_OP),                    // deside how many bytes (funct3)
+        .we(DM_WRITE_ENABLE),           // enable write to memory
+        .rst(reset),                    // form rst key
+        .clk(clk),                      // for SAVE till next clock
+        .dm_addr(MEM_DATA_ADDR),        // from ALU output
+        .data_in(MEM_DATA_IN),          // from register rs2
+        .data_out(MEM_DATA_OUT)    // to mux_wb
+);
 
 endmodule
