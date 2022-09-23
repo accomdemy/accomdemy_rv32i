@@ -14,7 +14,10 @@ module decoder(
     output reg              imme,   // mux_data2
     output reg              jmpe,   // pc jump
     output reg              be,     // branch enable
-    output reg  [2:0]       bop     // opcode funct3 as branch op
+    output reg  [2:0]       bop,    // opcode funct3 as branch op
+    output reg  [2:0]       dmop,   // memory operation
+    output reg              doe,    // memory data out enable
+    output reg              mwe     // memory disable
 );
 
     // ALU OP
@@ -50,8 +53,11 @@ module decoder(
                 pce         = _disable;     // use rs1 on ALU-data1
                 imme        = _disable;     // use rs2 on ALU-data2
                 jmpe        = _disable;     // use pc+4 on PC
+                doe         = _disable;     // use Data Out to/Register
                 be          = _disable;     // branch disabled
                 bop         = 3'b000;       // branch disabled
+                dmop        = 'b0;          // memory operation
+                mwe         = _disable;     // memory disable
 
                 case(prog[14:12])           // Func3
                     3'b000:                 // add / sub
@@ -102,8 +108,11 @@ module decoder(
                 pce         = _disable;     // use rs1 on ALU-data1
                 imme        = _enable;      // use imm on ALU-data2
                 jmpe        = _disable;     // use pc+4 on PC
+                doe         = _disable;     // use Data Out to/Register
                 be          = _disable;     // branch disabled
                 bop         = 3'b000;       // branch disabled
+                dmop        = 'b0;          // memory operation
+                mwe         = _disable;     // memory disable
 
                 case(prog[14:12])          // Func3
                     3'b000:                 // addi
@@ -147,9 +156,12 @@ module decoder(
                 pce         = _enable;      // use pc on ALU-data1
                 imme        = _enable;      // use imm on ALU-data2
                 jmpe        = _enable;      // use jmp on PC
+                doe         = _disable;     // use Data Out to/Register
                 aluop       = 8'h1;         // data1 + data2
                 be          = _disable;     // branch disabled
                 bop         = 3'b000;       // branch disabled
+                dmop        = 'b0;          // memory operation
+                mwe         = _disable;     // memory disable
             end
 
             7'b1100111: begin               // I-Type : JALR
@@ -163,11 +175,49 @@ module decoder(
                 pce         = _disable;     // use pc on ALU-data1
                 imme        = _enable;      // use imm on ALU-data2
                 jmpe        = _enable;      // use jmp on PC
+                doe         = _disable;     // use Data Out to/Register
                 aluop       = 8'h1;         // data1 + data2
                 be          = _disable;     // branch disabled
                 bop         = 3'b000;       // branch disabled
+                dmop        = 'b0;          // memory operation
+                mwe         = _disable;     // memory disable
             end
-
+            7'b0000011: begin               // I-Type : LB/LH/LW/LBU/LHU
+                ra1         = prog[19:15];  // rs1 implied
+                ra2         = 5'b0;         // rs2 not implied
+                wa          = prog[11:7];   // rd implied
+                imm         = { {20{prog[31]}}, prog[31:20] };  // imm implied
+                re1         = _enable;      // rs1 used
+                re2         = _disable;     // rs2 not used
+                we          = _enable;      // rd required
+                pce         = _disable;     // use pc on ALU-data1
+                imme        = _enable;      // use imm on ALU-data2
+                jmpe        = _disable;      // use jmp on PC
+                doe         = _enable;      // use Data Out to/Register
+                aluop       = 8'h1;         // data1 + data2
+                be          = _disable;     // branch disabled
+                bop         = 3'b000;       // branch disabled
+                dmop        = prog[14:12];  // memory operation
+                mwe         = _disable;     // memory enable
+            end
+            7'b0100011: begin               // S-Type : 
+                ra1         = prog[19:15];  // rs1 implied
+                ra2         = prog[24:20];         // rs2 not implied
+                wa          = prog[11:7];   // rd implied
+                imm         = { {20{prog[31]}}, prog[31:25],prog[11:7] };  // imm implied
+                re1         = _enable;      // rs1 used
+                re2         = _enable;     // rs2 not used
+                we          = _disable;      // rd required
+                pce         = _disable;     // use pc on ALU-data1
+                imme        = _enable;      // use imm on ALU-data2
+                jmpe        = _disable;      // use jmp on PC
+                doe         = _enable;      // use Data Out to/Register
+                aluop       = 8'h1;         // data1 + data2
+                be          = _disable;     // branch disabled
+                bop         = 3'b000;       // branch disabled
+                dmop        = prog[14:12];  // memory operation
+                mwe         = _enable;      // memory enable
+            end
             7'b0110111: begin               // U-Type : LUI
                 ra1         = 5'b0;         // rs1 not implied, but forced to use X0
                 ra2         = 5'b0;         // rs2 not implied
@@ -179,9 +229,12 @@ module decoder(
                 pce         = _disable;     // expecting 32'b0 on ALU-data1
                 imme        = _enable;      // use imm on ALU-data2
                 jmpe        = _disable;      // use pc+4 on PC
+                doe         = _disable;     // use Data Out to/Register
                 aluop       = 8'h1;         // data1 + data2
                 be          = _disable;     // branch disabled
                 bop         = 3'b000;       // branch disabled
+                dmop        = 'b0;          // memory operation
+                mwe         = _disable;     // memory disable
             end
 
             7'b0010111: begin               // U-Type : AUIPC
@@ -195,9 +248,12 @@ module decoder(
                 pce         = _enable;      // use pc on ALU-data1
                 imme        = _enable;      // use imm on ALU-data2
                 jmpe        = _disable;     // use pc+4 on PC
+                doe         = _disable;     // use Data Out to/Register
                 aluop       = 8'h1;         // data1 + data2
                 be          = _disable;     // branch disabled
                 bop         = 3'b000;       // branch disabled
+                dmop        = 'b0;          // memory operation
+                mwe         = _disable;     // memory disable
             end
 
             7'b1100011: begin               // B-Type
@@ -211,9 +267,12 @@ module decoder(
                 pce         = _enable;      // use pc on ALU-data1
                 imme        = _enable;      // use imm on ALU-data2
                 jmpe        = _disable;     // use pc+4 on PC
+                doe         = _disable;     // use Data Out to/Register
                 aluop       = 8'h1;         // data1 + data2
                 be          = _enable;      // branch enabled
                 bop         = prog[14:12];  // branch enabled
+                dmop        = 'b0;          // memory operation
+                mwe         = _disable;     // memory disable
             end
 
             default: begin
@@ -226,10 +285,13 @@ module decoder(
                 we          = _disable;     // rd not used
                 pce         = _disable;     // use rs1 on ALU-data1
                 imme        = _disable;     // use rs2 on ALU-data2
-                jmpe        = _disable;     // use pc+4 on PC
+                jmpe        = _disable;     // use pc+4 on PC/Register
+                doe         = _disable;     // use Data Out to/Register
                 aluop       = 8'h0;         // do nothing
                 be          = _disable;     // branch disabled
                 bop         = 3'b000;       // branch disabled
+                dmop        = 'b0;          // memory operation
+                mwe         = _disable;     // memory disable
             end
         endcase
     end
